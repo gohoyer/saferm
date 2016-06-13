@@ -34,7 +34,7 @@ class saferm::install {
 
   case $saferm::params::install_method {
     'package': {
-      package {"$saferm::params::package":
+      package {$saferm::params::package_name:
         ensure => 'present'
       }
     }
@@ -45,11 +45,11 @@ class saferm::install {
         creates => "/usr/src/safe-rm-${version}.tar.gz",
       }
       exec{'Uncompress safe-rm':
-        command => "tar -xzf /usr/src/safe-rm-${version}.tar.gz safe-rm-${version}/safe-rm --strip-components=1 -C /usr/bin/"
+        command => "tar -xzf /usr/src/safe-rm-${version}.tar.gz safe-rm-${version}/safe-rm --strip-components=1 -C ${params::bin_path}"
       }
     }
     default: {
-      fail("Module ${name} doesn't support ${saferm::params::install_method} as an installation method.")
+      warning("Safe-rm won't be installed.")
     }
   }
 }
