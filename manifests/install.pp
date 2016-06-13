@@ -47,7 +47,9 @@ class saferm::install {
         creates => "/usr/src/safe-rm-${version}.tar.gz",
       }
       exec{'Uncompress safe-rm':
-        command => "tar -xzf /usr/src/safe-rm-${version}.tar.gz safe-rm-${version}/safe-rm --strip-components=1 -C ${params::bin_path}"
+        command => "tar -xzf /usr/src/safe-rm-${version}.tar.gz safe-rm-${version}/safe-rm --strip-components=1 -C ${params::bin_path}",
+        path    => '/bin/',
+        creates => "${params::bin_path}/safe-rm"
       }
     }
     default: {
