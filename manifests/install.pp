@@ -30,6 +30,8 @@
 #
 class saferm::install {
 
+  include saferm::params
+
   $version = $saferm::version
 
   case $saferm::params::install_method {
