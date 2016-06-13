@@ -42,12 +42,16 @@ class saferm::install {
     }
     'tarball': {
       exec{'Download safe-rm':
-        command => "wget -q https://launchpad.net/safe-rm/trunk/${version}/+download/safe-rm-${version}.tar.gz -O /usr/src/",
+        command => "wget -q https://launchpad.net/safe-rm/trunk/${version}/\
++download/safe-rm-${version}.tar.gz -O /usr/src/safe-rm-\
+${version}.tar.gz",
         path    => '/usr/bin',
         creates => "/usr/src/safe-rm-${version}.tar.gz",
       }
       exec{'Uncompress safe-rm':
-        command => "tar -xzf /usr/src/safe-rm-${version}.tar.gz safe-rm-${version}/safe-rm --strip-components=1 -C ${params::bin_path}",
+        command => "tar -xzf /usr/src/safe-rm-${version}.tar.gz \
+--strip-components=1 -C ${params::bin_path} \
+safe-rm-${version}/safe-rm",
         path    => '/bin/',
         creates => "${params::bin_path}/safe-rm"
       }
