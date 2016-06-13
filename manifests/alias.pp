@@ -21,6 +21,8 @@
 #
 class saferm::alias {
 
+  include saferm::params
+
   $blacklist = $saferm::blacklist
 
   file {'/etc/profile.d/safe-rm.sh':
