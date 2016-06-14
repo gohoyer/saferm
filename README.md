@@ -14,70 +14,160 @@
 
 ## Description
 
-Start with a one- or two-sentence summary of what the module does and/or what
-problem it solves. This is your 30-second elevator pitch for your module.
-Consider including OS/Puppet version it works with.
+This puppet module installs and configure [safe-rm](https://launchpad.net/safe-rm), a tool to prevent accidental deletion of important files and directories.
 
-You can give more descriptive information in a second paragraph. This paragraph
-should answer the questions: "What does this module *do*?" and "Why would I use
-it?" If your module has a range of functionality (installation, configuration,
-management, etc.), this is the time to mention it.
+If you want to know more about the safe-rm tool, take a look at the official page [here](https://launchpad.net/safe-rm).
 
 ## Setup
 
-### What saferm affects **OPTIONAL**
+### What saferm affects
 
-If it's obvious what your module touches, you can skip this section. For
-example, folks can probably figure out that your mysql_instance module affects
-their MySQL instances.
+- ```/etc/safe-rm.conf```
+- ```/usr/bin/safe-rm```  
 
-If there's more that they should know about, though, this is the place to mention:
+Optionally:
+- ```/etc/profile.d/safe-rm.sh```
+- ```~/.safe-rm```
 
-* A list of files, packages, services, or operations that the module will alter,
-  impact, or execute.
-* Dependencies that your module automatically installs.
-* Warnings or other important notices.
-
-### Setup Requirements **OPTIONAL**
-
-If your module requires anything extra before setting up (pluginsync enabled,
-etc.), mention it here.
-
-If your most recent release breaks compatibility or requires particular steps
-for upgrading, you might want to include an additional "Upgrading" section
-here.
+### Setup requirements
+This module needs tar and wget to work properly.
 
 ### Beginning with saferm
 
-The very basic steps needed for a user to get the module up and running. This
-can include setup steps, if necessary, or it can be an example of the most
-basic use of the module.
+To install safe-rm on your system, include the ```saferm``` class: ```include saferm```.
 
 ## Usage
 
-This section is where you describe how to customize, configure, and do the
-fancy stuff with your module here. It's especially helpful if you include usage
-examples and code samples for doing things with your module.
+The saferm module install and configure safe-rm on your system. By default, the module install version 0.12 and shields the following directories:  
+- /
+- /bin
+- /boot
+- /dev
+- /etc
+- /home
+- /initrd
+- /lib
+- /proc
+- /root
+- /sbin
+- /sys
+- /usr
+- /usr/bin
+- /usr/include
+- /usr/lib
+- /usr/local
+- /usr/local/bin
+- /usr/local/include
+- /usr/local/sbin
+- /usr/local/share
+- /usr/sbin
+- /usr/share
+- /usr/src
+- /var  
+
+To install a different version of safe-rm:  
+~~~
+class {'saferm':
+  version => '0.11'
+}
+~~~
+
+To set a different list of directories to be protected:  
+~~~
+class {'saferm':
+  blacklist => ["/home","/home/user","/my_custom_dir"]'
+}
+~~~
+The directories passed on the ```blacklist``` variable of the ```saferm``` class are system wide and will affect all users.
+
+The defined type ```saferm::user_blacklist``` allow you to specify a custom list of directories to be protected for each user.  
+~~~
+saferm::user_blacklist {'/home/bob/':
+  blacklist => [
+    '/home/bob/documents',
+    '/home/bob/photos',
+    '/bob_protected_dir',
+  ]
+}
+~~~
+
+The class ```saferm::alias``` creates an alias to the rm command pointing to safe-rm.
+~~~
+include saferm::alias
+~~~
+This will create a permanent the alias ```rm="/usr/bin/safe-rm"``` at ```/etc/profile.d/safe-rm.sh```.
 
 ## Reference
 
-Here, include a complete list of your module's classes, types, providers,
-facts, along with the parameters for each. Users refer to this section (thus
-the name "Reference") to find specific details; most users don't read it per
-se.
+### Classes
+
+#### Public classes
+* `saferm`: Install and configure safe-rm.
+* `saferm::alias`: creates an alias to the `rm` command.
+
+#### Private classes
+* `saferm::params`: Determines the installation method, the binary path and the package name for safe-rm.
+* `saferm::install`: install safe-rm according the installation method.
+* `saferm::config`: configures safe-rm.
+
+### Defined types
+* `saferm::user_blacklist`: Creates a safe-rm configuration file at the home of the user containing a custom set of directories to be protected for this user. The `$title` of this define must be the user home.
+
+### Parameters
+The following parameters are avaliable in `saferm`:
+
+#### version
+Specifies the safe-rm version to be installed.  
+Valid options: '0.12', '0.11', '0.10'.  
+Default: '0.12'  
+
+#### blacklist
+Specifies an array of directories to be protected system wide.  
+Default:  
+- /
+- /bin
+- /boot
+- /dev
+- /etc
+- /home
+- /initrd
+- /lib
+- /proc
+- /root
+- /sbin
+- /sys
+- /usr
+- /usr/bin
+- /usr/include
+- /usr/lib
+- /usr/local
+- /usr/local/bin
+- /usr/local/include
+- /usr/local/sbin
+- /usr/local/share
+- /usr/sbin
+- /usr/share
+- /usr/src
+- /var
+
+The following parameters are avaliable in `saferm::user_blacklist`:
+
+#### blacklist
+Requird parameter that specifies an array of directories to be protected on the user environment.
+Default: there's no default value for this parameter.
 
 ## Limitations
 
-This is where you list OS compatibility, version compatibility, etc. If there
-are Known Issues, you might want to include them under their own heading here.
+This module cannot guarantee installation of safe-rm versions that aren't avaliable on platform repositories for Debian like systems.
+
+This module is tested on the following OS:
+- CentOS 5.x
+- CentOS 6.x
+- Centos 7.x
+- Debian 6.x
+- Debian 7.x
+- Debian 8.x
 
 ## Development
 
-Since your module is awesome, other users will want to play with it. Let them
-know what the ground rules for contributing are.
-
-## Release Notes/Contributors/Etc. **Optional**
-
-If you aren't using changelog, put your release notes here (though you should
-consider using changelog). You can also add any additional sections you feel
-are necessary or important to include here. Please use the `## ` header.
+Feel free to contribute for this module at the module's [github repo](https://github.com/gohoyer/saferm).
