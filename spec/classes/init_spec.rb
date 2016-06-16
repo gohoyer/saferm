@@ -7,11 +7,17 @@ describe 'saferm', :type => :class do
       should contain_class('saferm::install')
       should contain_class('saferm::config')
       should contain_class('saferm::params')
-      should contain_file('/etc/safe-rm.conf')
       should contain_package('safe-rm')
       should contain_anchor('saferm::start')
       should contain_anchor('saferm::end')
+      should contain_file('/etc/safe-rm.conf')
     }
+    it 'Should generate valid content for /etc/safe-rm.conf' do
+      content = catalogue.resource('file', '/etc/safe-rm.conf').send(:parameters)[:content]
+      content.should match('/bin')
+      content.should match('/dev')
+      content.should match('/boot')
+    end
   end
   context 'On RedHat systems with default values' do
     let(:facts) { {:osfamily => 'RedHat'} }
@@ -32,7 +38,14 @@ describe 'saferm', :type => :class do
         'path'    => '/bin/',
         'creates' => '/usr/bin/safe-rm'
       })
+      should contain_file('/etc/safe-rm.conf')
     }
+    it 'Should generate valid content for /etc/safe-rm.conf' do
+      content = catalogue.resource('file', '/etc/safe-rm.conf').send(:parameters)[:content]
+      content.should match('/bin')
+      content.should match('/dev')
+      content.should match('/boot')
+    end
   end
   context 'On Unsupported OS family' do
     let(:facts) { {:osfamily => 'Darwin'} }
