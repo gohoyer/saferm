@@ -23,7 +23,7 @@ class saferm::alias {
 
   include saferm::params
 
-  $blacklist = $saferm::blacklist
+  $bin_path = $saferm::params::bin_path
 
   file {'/etc/profile.d/safe-rm.sh':
     ensure  => file,
