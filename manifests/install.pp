@@ -50,10 +50,10 @@ ${version}.tar.gz",
       }
       exec{'Uncompress safe-rm':
         command => "tar -xzf /usr/src/safe-rm-${version}.tar.gz \
---strip-components=1 -C ${params::bin_path} \
+--strip-components=1 -C ${saferm::params::bin_path} \
 safe-rm-${version}/safe-rm",
         path    => '/bin/',
-        creates => "${params::bin_path}/safe-rm"
+        creates => "${saferm::params::bin_path}safe-rm"
       }
     }
     default: {
