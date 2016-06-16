@@ -1,14 +1,14 @@
 # Defined type: saferm::user_blacklist
 # ===========================
 #
-# Creates ~/.safe-rm file in the user home containing the directories to be protect.
+# Creates ~/.safe-rm file in the user home with  directories to be protected.
 #
 # Parameters
 # ----------
 #
 # * `title`
 # Specify the user home directory as the title of this defined type.
-# Default: there's no default value for this parameter.
+# Default: there's no default val ue for this parameter.
 #
 # * `blacklist`
 # Specify an array of user directories to be protected.
