@@ -7,8 +7,8 @@ describe 'saferm::alias', :type => :class do
       should contain_file('/etc/profile.d/safe-rm.sh')
     }
     it 'Should generate valid content for /etc/profile.d/safe-rm.sh' do
-            content = catalogue.resource('file', '/etc/profile.d/safe-rm.sh').send(:parameters)[:content]
-            content.should match('alias rm="/usr/bin/safe-rm"')
+      content = catalogue.resource('file', '/etc/profile.d/safe-rm.sh').send(:parameters)[:content]
+      content.should match('alias rm="/usr/bin/safe-rm"')
     end
   end
 end
