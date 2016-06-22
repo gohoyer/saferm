@@ -1,14 +1,15 @@
-## Release 0.1.2
-### Summary
+## [0.1.3] - 2016-06-21
+### Changed
+ - Changelog format.
 
-Improves quality scores by specifying stdlib required version.
+## [0.1.2] - 2016-06-20
+### Added
+ - Stdlib required version.
 
-## Release 0.1.1
-### Summary
+## [0.1.1] - 2016-06-20
+### Added
+ - OS supported on metadata.json.
 
-Adds OS supported on metadata.json.
-
-## Release 0.1.0
-### Summary
-
-Initial release.
+## [0.1.0] - 2016-06-20
+### Added
+ - Initial release.
